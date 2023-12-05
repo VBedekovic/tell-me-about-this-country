@@ -1,5 +1,11 @@
 
-const tourGuideSkeletonPrompt = function (question, aboutCountry, answerRangeString="1 or 2 sentences") {
+/**
+   * @param {string} question
+   * @param {string} aboutCountry
+   * @param {string} answerRangeString
+   * @return {string}
+   */
+function tourGuideSkeletonPrompt(question, aboutCountry, answerRangeString="1 or 2 sentences") {
     return `
         You are a tour guide with the purpose to teach about the countries of the world.
         You answer questions in ${answerRangeString}. 
@@ -14,6 +20,8 @@ const tourGuideSkeletonPrompt = function (question, aboutCountry, answerRangeStr
 }
 
 
-console.log(tourGuideSkeletonPrompt("What are the colors of their flag?", "Spain"));
+//console.log(tourGuideSkeletonPrompt("What are the colors of their flag?", "Spain"));
 
-
+module.exports = {
+    tourGuideSkeletonPrompt
+}
