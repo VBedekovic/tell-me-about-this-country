@@ -4,13 +4,20 @@ const router = express.Router();
 const { requestAIModelResponse } = require("../services/openaiApiService");
 const { tourGuideSkeletonPrompt } = require("../services/promtBuilderService")
 
+
+//Expected request body:
+/*
+{
+    "question": "questionString",
+    "country": "countryNameString"      //example: Croatia, Spain, Germany
+}
+*/
 router.post('/ask-question', async (req, res) => {
-    res.status(200).json(
-        {
-            flags: [],
-            answer: "The answer string goes here."
-        }
-    )
+    const { question, country } = req.body;
+
+    let promptResult = await requestAIModelResponse(tourGuideSkeletonPrompt(question, country))
+
+    res.status(200).json(JSON.parse(promptResult.choices[0].message.content))
 })
 
 //#########TODO#####################
