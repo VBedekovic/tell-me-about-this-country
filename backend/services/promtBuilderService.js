@@ -36,10 +36,13 @@ function travelerSkeletonPrompt(question, aboutCountry, answerRangeString="1 or 
    * @param {string} regionOrContinentString
    * @param {string[]} personalityArray
    * @return {string}
+   * @param {string} genderString
+   * @param {string} nameString
    */
-function travelerChooseCountryPrompt(regionOrContinentString, personalityArray) {
+function travelerChooseCountryPrompt(regionOrContinentString, personalityArray, genderString, nameString) {
     return `
         You are a traveler with these personality traits: ${personalityArray.join(", ")}.
+        You are a ${genderString} with the name: ${nameString}.
         In what random country from ${regionOrContinentString} would you travel now.
         Write your answers like a json object with one variable "country" and it should contain only the name of the country.
         `
