@@ -21,7 +21,6 @@ router.post('/ask-question', async (req, res) => {
     res.status(200).json(JSON.parse(promptResult.choices[0].message.content))
 })
 
-//#########TODO#####################
 router.get('/n-random-questions/:n', async (req, res) => {
     const numberOfQuestions = req.params.n;
 

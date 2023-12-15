@@ -20,8 +20,35 @@ function tourGuideSkeletonPrompt(question, aboutCountry, answerRangeString="1 or
 }
 
 
+/**
+   * @param {string} question
+   * @param {string} aboutCountry
+   * @param {string} answerRangeString
+   * @return {string}
+   */
+function travelerSkeletonPrompt(question, aboutCountry, answerRangeString="1 or 2 sentences") {
+    return `
+        You are a traveler
+        `
+}
+
+/**
+   * @param {string} regionOrContinentString
+   * @param {string[]} personalityArray
+   * @return {string}
+   */
+function travelerChooseCountryPrompt(regionOrContinentString, personalityArray) {
+    return `
+        You are a traveler with these personality traits: ${personalityArray.join(", ")}.
+        In what random country from ${regionOrContinentString} would you travel now.
+        Write your answers like a json object with one variable "country" and it should contain only the name of the country.
+        `
+}
+
 //console.log(tourGuideSkeletonPrompt("What are the colors of their flag?", "Spain"));
 
 module.exports = {
-    tourGuideSkeletonPrompt
+    tourGuideSkeletonPrompt,
+    travelerSkeletonPrompt,
+    travelerChooseCountryPrompt
 }
