@@ -2,7 +2,8 @@ const express = require('express');
 const router = express.Router();
 
 const { requestAIModelResponse } = require("../services/openaiApiService");
-const { tourGuideSkeletonPrompt } = require("../services/promtBuilderService")
+const { tourGuideSkeletonPrompt } = require("../services/promtBuilderService");
+const { getSuggestedQuestions } = require("../services/suggestedQuestionsService")
 
 
 //Expected request body:
@@ -23,10 +24,9 @@ router.post('/ask-question', async (req, res) => {
 //#########TODO#####################
 router.get('/n-random-questions/:n', async (req, res) => {
     const numberOfQuestions = req.params.n;
-    const questionsArray = Array.from({ length: numberOfQuestions }, () => "Question?");
-    // get questions from the service and return them
-    //console.log(numberOfQuestions)
-    //console.log(questionsArray)
+
+    const questionsArray = getSuggestedQuestions(numberOfQuestions);
+
     res.status(200).json(
         {
             questionsArray: questionsArray
