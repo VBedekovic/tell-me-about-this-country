@@ -19,25 +19,38 @@ function tourGuideSkeletonPrompt(question, aboutCountry, answerRangeString="1 or
         `
 }
 
-
+//#############TODO#################
 /**
    * @param {string} question
-   * @param {string} aboutCountry
-   * @param {string} answerRangeString
+   * @param {string} inCountry
+   * @param {string[]} personalityArray
+   * @param {string} genderString
+   * @param {string} nameString
    * @return {string}
    */
-function travelerSkeletonPrompt(question, aboutCountry, answerRangeString="1 or 2 sentences") {
+function travelerSkeletonPrompt(question, inCountry, personalityArray, genderString, nameString) {
     return `
-        You are a traveler
+        You are a traveler with these personality traits: ${personalityArray.join(", ")}.
+        You are a ${genderString} with the name: ${nameString}.
+        You currently traveled to ${inCountry} and know all about it.
+        You will be asked questions restricted by category. If a category is set as 0 you can't answer that type of question.
+        You can't disclouse the name of the country you are currently in.
+        If the question doesn't seem like a question or asks of knowledge you shouldn't know as a traveler (like coding or math) correct the user about your purpose.
+        Write your answers like a json object with three variables "flags", "category_dict_todo" and "answer".
+        Flags represents an array of string.
+        If you view the question as a valid question add "valid" in flags or invalid if not.
+        In the answer variable write what you would normally write.
+        The user asks you the following question:
+        ${question}
         `
 }
 
 /**
    * @param {string} regionOrContinentString
    * @param {string[]} personalityArray
-   * @return {string}
    * @param {string} genderString
    * @param {string} nameString
+   * @return {string}
    */
 function travelerChooseCountryPrompt(regionOrContinentString, personalityArray, genderString, nameString) {
     return `
