@@ -2,10 +2,17 @@ const express = require('express');
 const path = require('path');
 const imageDownloader = require('./imageService/imageDownloader');
 
+require('dotenv').config();
+
 const app = express();
 const port = process.env.PORT || 5005;
 
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.json());
+
+const tourGuideAPI = require('./api/tourGuideCommunicationAPI');
+app.use('/tour-guide-v1', tourGuideAPI)
+
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
