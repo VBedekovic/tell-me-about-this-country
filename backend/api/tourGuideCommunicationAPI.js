@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
+const imageDownloader = require('../services/imageDownloader');
 const { requestAIModelResponse } = require("../services/openaiApiService");
 const { tourGuideSkeletonPrompt } = require("../services/promtBuilderService");
 const { getSuggestedQuestions } = require("../services/suggestedQuestionsService")
@@ -32,6 +33,20 @@ router.get('/n-random-questions/:n', async (req, res) => {
         }
     )
 })
+
+
+router.get('/ask-for-images', async (req, res) => {
+    const searchTerm = req.query.term;
+    const numberOfImages = parseInt(req.query.num) || 5;
+
+    try {
+        const imageUrls = await imageDownloader.getGoogleImageUrls(searchTerm, numberOfImages);
+        await imageDownloader.downloadImages(imageUrls);
+        res.send('Images downloaded successfully!');
+    } catch (error) {
+        res.status(500).send('Error downloading images');
+    }
+});
 
 
 module.exports = router;
