@@ -12,6 +12,9 @@ app.use(express.json());
 const tourGuideAPI = require('./api/tourGuideCommunicationAPI');
 app.use('/tour-guide-v1', tourGuideAPI)
 
+const travelerAPI = require('./api/travelerCommunicationAPI');
+app.use('/traveler-v1', travelerAPI)
+
 
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
