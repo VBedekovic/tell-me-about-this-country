@@ -1,26 +1,35 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { ComposableMap, Geographies, Geography } from "react-simple-maps";
-import { Tooltip as ReactTooltip } from "react-tooltip";
+import '../App.css';
+import Box from "@mui/material/Box"
 
-
-import MapChart from "./MapChart";
+import WithSplashScreen from '../components/WithSplashScreen';// Include this line
+import { Button, Typography } from '@mui/material';
 
 function LandingPage() {
-  const [content, setContent] = useState("");
   return (
     <>
-      <div>
-        <MapChart setTooltipContent={setContent}
-          content={content} />
-        <ReactTooltip id={content}
-          place="bottom"
-          content={content}
-          offset={content === "Russia" ? "" : ""}
-        />
-      </div>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet" />
+      </head>
+      <Box className="app" style={{ background: "content-box radial-gradient(orange, white)" }}>
+        <br />
+        <Typography variant="h2" fontFamily="Bungee Spice">Tell me about this country</Typography>
+
+        <Box style={{ margin: "auto", height: "50%" }}>
+          <Button size="large" variant="contained" color="error" style={{ fontFamily: "Pixelify Sans", fontSize: "30px", minWidth: "300px", minHeight: "100px" }}>Start game
+          </Button>
+          <br />
+          <br />
+          <br />
+          <Button size="large" variant="contained" color="error" style={{ fontFamily: "Pixelify Sans", fontSize: "30px", minWidth: "300px", minHeight: "100px" }}>Training
+          </Button>
+        </Box>
+      </Box>
     </>
   );
 }
 
-export default LandingPage
-
+// Update this line, so that withSplashScreen gets App as parameter
+export default LandingPage;  
