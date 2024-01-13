@@ -1,5 +1,24 @@
 const fs = require('fs');
 
+/**
+ * Initializes a category chances dictionary with equal chances for each category.
+ * The default number of chances is set to 5, but it can be easily changed.
+ * Categories include "History", "Geography", "Economics", "Media&Sports", and "Statistics".
+ *
+ * @param {number} numberOfchances - The number of chances to assign to each category.
+ * @returns {Object.<string, number>} - The category chances dictionary.
+ */
+function initCategoryChancesDict(numberOfchances = 3) {
+    return {
+        "History": numberOfchances,
+        "Geography": numberOfchances,
+        "Economics": numberOfchances,
+        'Media&Sports': numberOfchances,
+        "Statistics": numberOfchances,
+    }
+} 
+
+
 // Function to retrieve all regions from a text file
 function getAllRegions() {
     const regions = fs.readFileSync('backend/services/regions.txt', 'utf8').split('\n').map((line) => line.trim());
@@ -42,4 +61,13 @@ function getRandomName(gender) {
     const randomFirstName = names[Math.floor(Math.random() * names.length)];
     const randomSurname = surnames[Math.floor(Math.random() * surnames.length)];
     return `${randomFirstName} ${randomSurname}`;
+}
+
+module.exports = {
+    initCategoryChancesDict,
+    getAllContinents,
+    getAllRegions,
+    getRandomPersonalityTraits,
+    getRandomGender,
+    getRandomName
 }
