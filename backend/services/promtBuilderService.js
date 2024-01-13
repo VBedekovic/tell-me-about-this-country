@@ -47,6 +47,8 @@ function travelerSkeletonPrompt(question, inCountry, personalityArray, genderStr
     const categories = Object.keys(categoryChancesDict);
     
     const categoryInfo = categories.map(category => `${category}: ${categoryChancesDict[category]}`).join('\n');
+
+    const categoryList = categories.map(category => `"${category.toLowerCase()}"`).join(', ');
     
     return `
 You are a traveler with these personality traits: ${personalityArray.join(", ")}.
@@ -62,7 +64,7 @@ Write your answers like a json object with three variables "flags", "answered_ca
 Flags represents an array of string.
 If you view the question as a valid question add "valid" in flags or invalid if not.
 -If it is a valid question, determine to which category of the ones I'll give to you it belongs to and write it in the answered_category as a string of value "history", "geography", "economics", "media&sports" or "statistics".
--If you recognize the user is trying to guess in which country you are, count question as valid. If user guesses correctly add "correct _guess" value to flags and set answered_category to null. If user guesses wrong add  "wrong_guess" to flags and set answered_category to null. 
+-If you recognize the user is trying to guess in which country you are, count question as valid. If user guesses correctly add "correct_guess" value to flags and set answered_category to null. If user guesses wrong add  "wrong_guess" to flags and set answered_category to null. 
 -If it is an invalid question, set the answered_category value as null.
 -In the answer variable write what you would normally write.
 -Make sure to write numbers properly in the answer string.

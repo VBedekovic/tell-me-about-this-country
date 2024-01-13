@@ -10,10 +10,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json());
 
 const tourGuideAPI = require('./api/tourGuideCommunicationAPI');
-app.use('/tour-guide-v1', tourGuideAPI)
+app.use('/tour-guide-v1', tourGuideAPI);
 
 const travelerAPI = require('./api/travelerCommunicationAPI');
-app.use('/traveler-v1', travelerAPI)
+const { travelerMiddleware } = require('./services/travelerTestService');
+app.use('/traveler-v1', travelerMiddleware, travelerAPI);
 
 
 app.get('/', (req, res) => {

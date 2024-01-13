@@ -3,15 +3,17 @@ const router = express.Router();
 
 const { requestAIModelResponse } = require("../services/openaiApiService");
 const Traveler = require('../classes/traveler');
-const traveler = require("../services/travelerTestService");
+const { setCurrentTraveler, getCurrentTraveler } = require('../services/travelerTestService');
 
 
 router.get('/regions', async (req, res) => {
     // TODO 
+    res.status(501)
 })
 
 router.get('/continents', async (req, res) => {
     // TODO 
+    res.status(501)
 })
 
 
@@ -25,7 +27,7 @@ router.post('/init-traveler', async (req, res) => {
     const { regionOrContinent } = req.body;
     
     const traveler = await Traveler.createRandomTraveler(regionOrContinent);
-    // TODO save traveler instance to travelerTestService.js
+    setCurrentTraveler(traveler)
 
     res.status(200).json(traveler.getInfo())
 
@@ -33,9 +35,11 @@ router.post('/init-traveler', async (req, res) => {
 
 
 router.get('/current-traveler-info', async (req, res) => {
-    // TODO get traveler from service and return info
+    res.status(200).json(getCurrentTraveler().getInfo())
+})
 
-    res.status(200).json(null)
+router.get('/current-traveler-category-chances', async (req, res) => {
+    res.status(200).json(getCurrentTraveler().getCategoryChancesDict())
 })
 
 
@@ -48,10 +52,9 @@ router.get('/current-traveler-info', async (req, res) => {
 router.post('/ask-question', async (req, res) => {
     const { question } = req.body;
 
-    //let promptResult = await requestAIModelResponse(travelerSkeletonPrompt(question, country))
-    // ^^^ moved to the traveler class
+    const promptResult = await getCurrentTraveler().askQuestion(question)
 
-    res.status(200).json(JSON.parse(promptResult.choices[0].message.content))
+    res.status(200).json(promptResult)
 })
 
 module.exports = router;
