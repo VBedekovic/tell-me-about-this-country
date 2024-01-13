@@ -53,3 +53,5 @@ router.post('/ask-question', async (req, res) => {
 
     res.status(200).json(JSON.parse(promptResult.choices[0].message.content))
 })
+
+module.exports = router;
