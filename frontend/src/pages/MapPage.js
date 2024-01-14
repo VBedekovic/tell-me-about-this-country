@@ -5,6 +5,7 @@ import { Tooltip as ReactTooltip } from "react-tooltip";
 import MapChart from "../components/MapChart";
 
 function MapPage() {
+  //console.log(region)
   const [content, setContent] = useState("");
   return (
     <>

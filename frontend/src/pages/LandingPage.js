@@ -1,29 +1,60 @@
 import '../App.css';
 import Box from "@mui/material/Box"
-
-import WithSplashScreen from '../components/WithSplashScreen';// Include this line
+import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom';
 import { Button, Typography } from '@mui/material';
+import Modal from '@mui/material/Modal';
+import GamePage from './GamePage';
+
+const modalStyle = {
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: "60%",
+  height: "40%",
+  bgcolor: 'background.paper',
+  border: '2px solid #000',
+  boxShadow: 24,
+  p: 4,
+};
 
 function LandingPage() {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const navigate = useNavigate()
+
+  const [selectedRegion, setSelectedRedion] = useState("")
+
+  const navigateToGameScreen = () => {
+    navigate("/game")
+  }
+
+  const navigateToTrainingScreen = () => {
+    navigate("/training")
+  }
+
   return (
     <>
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-        <link href="https://fonts.googleapis.com/css2?family=Bungee+Spice:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet" />
-        <link href="https://fonts.googleapis.com/css2?family=Pixelify+Sans:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap" rel="stylesheet" />
-      </head>
-      <Box className="app" style={{ background: "content-box radial-gradient(orange, white)" }}>
-        <br />
-        <Typography variant="h2" fontFamily="Bungee Spice">Tell me about this country</Typography>
 
-        <Box style={{ margin: "auto", height: "50%" }}>
-          <Button size="large" variant="contained" color="error" style={{ fontFamily: "Pixelify Sans", fontSize: "30px", minWidth: "300px", minHeight: "100px" }}>Start game
+      <Box style={{ background: "content-box radial-gradient(orange, white)", width: "100%", height: "100vh", display: "flex", flexDirection: "column", alignContent: "space-between" }}>
+        <Typography variant="h2" fontFamily="Bungee Spice" sx={{ margin: "auto" }}>Tell me about this country</Typography>
+        <Box style={{ margin: "auto", flex: "0 0 60%" }}>
+          <Button size="large"
+            variant="contained"
+            color="error"
+            style={{ fontFamily: "Pixelify Sans", fontSize: "30px", minWidth: "300px", minHeight: "100px" }}
+            onClick={navigateToGameScreen}>
+            Start game
           </Button>
           <br />
           <br />
           <br />
-          <Button size="large" variant="contained" color="error" style={{ fontFamily: "Pixelify Sans", fontSize: "30px", minWidth: "300px", minHeight: "100px" }}>Training
+          <Button size="large" variant="contained" color="error"
+            style={{ fontFamily: "Pixelify Sans", fontSize: "30px", minWidth: "300px", minHeight: "100px" }}
+            onClick={navigateToTrainingScreen}>
+            Training
           </Button>
         </Box>
       </Box>
@@ -31,5 +62,4 @@ function LandingPage() {
   );
 }
 
-// Update this line, so that withSplashScreen gets App as parameter
 export default LandingPage;  

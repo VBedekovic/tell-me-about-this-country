@@ -3,6 +3,10 @@ import Messages from "./Messages";
 import Input from "./Input";
 import '../Chat-styles.css';
 import { countries } from "country-list-json";
+import { Box, Card, Typography, Popover } from "@mui/material";
+
+const apiLink = process.env.APILINK
+
 
 
 function randomName() {
@@ -43,7 +47,7 @@ let myName = randomName()
 let serverColor = randomColor()
 let serverName = randomName()
 
-function Chat() {
+function Chat({ trainingMode }) {
   const [messages, setMessages] = useState([{
     id: '1',
     data: 'This is a test message!',
@@ -60,8 +64,23 @@ function Chat() {
     username: myName,
     color: myColor,
   });
+  const [questions, setQuestions] = useState(false)
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [inputBox, setInputBox] = useState("")
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
 
   const onSendMessage = async (message) => {
+    setInputBox("")
     setMessages(previousMessages => ([...previousMessages, {
       id: Math.random(),
       data: message,
@@ -75,7 +94,7 @@ function Chat() {
     }]))
     try {
       // add real app link from env
-      const response = await fetch(`http://localhost:5000/api/ask-aquestion`,
+      const response = await fetch(`${apiLink}/ask-aquestion`,
         {
           method: "POST",
           mode: "cors",
@@ -107,6 +126,33 @@ function Chat() {
 
   }
 
+  const fetchQuestionIdeas = async (event) => {
+    try {
+      setAnchorEl(event.currentTarget);
+      setQuestions(["Hello, is this question working aite???", "Hello, is this question working aite?", "Hello, is this question working aite?"])
+      const response = await fetch(`${apiLink}/tour-guide-v1/n-random-questions/3`,
+        {
+          method: "GET",
+          mode: "cors",
+          headers: {
+            "Content-type": "application/json"
+          }
+        })
+      const jsonData = await response.json();
+      console.log(jsonData)
+      setQuestions(jsonData)
+
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const handleChooseMessage = (event) => {
+    console.log(event.target.innerHTML)
+    setAnchorEl(null)
+    setInputBox(event.target.innerHTML)
+  }
+
   return (
     <>
       <head>
@@ -117,10 +163,32 @@ function Chat() {
         <link rel='icon' href='/favicon.ico' />
       </head>
       <main className="app">
-        <div className="appContent">
+        {trainingMode ? <Box sx={{ minHeight: "8%", minWidth: "95%", padding: "5px" }}>
+          <Card onClick={fetchQuestionIdeas} sx={{ height: "90%", width: "100%", display: "flex", flexDirection: "column", cursor: "pointer" }}>
+            <Typography variant="h5" sx={{ margin: "auto" }}>Question ideas</Typography>
+          </Card>
+        </Box> : <></>}
+        <Popover
+          id={id}
+          open={open}
+          anchorEl={anchorEl}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+          }}
+          style={{ width: "100%", margin: "auto", padding: "5px" }}
+        >
+          {Object.values(questions).map(question => {
+            return (<Typography onClick={handleChooseMessage} sx={{ p: 2, width: "100%", cursor: "pointer", transition: "background-color 0.5s", ":hover": { backgroundColor: "rgba(99,99,191,.07)" } }}>{question}</Typography>
+            )
+          })}
+        </Popover>
+
+        <div className="appContent" style={{}}>
           <Messages messages={messages} me={me} />
           <Input
             onSendMessage={onSendMessage}
+            inputBox={inputBox}
           />
         </div>
       </main>
