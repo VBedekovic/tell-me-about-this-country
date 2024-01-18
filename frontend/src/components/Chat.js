@@ -56,7 +56,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
       id: '1',
       clientData: {
         color: serverColor,
-        username: serverName,
+        username: "Tour guide",
       },
     },
   }] : []);
@@ -71,6 +71,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
   const [travelerData, setTravelerData] = useState(null)
   const [trainingSelectedCountry, setTrainingSelectedCountry] = useState(null)
   const [typing, setTyping] = useState(false)
+  const [waitForResponse, setWaitForReponse] = useState(null)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -97,6 +98,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
       },
     }]))
     setTyping(true)
+    setWaitForReponse(true)
     if (trainingMode) {
       try {
         // add real app link from env
@@ -124,7 +126,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
             id: '1',
             clientData: {
               color: serverColor,
-              username: serverName,
+              username: "Tour guide",
             },
           },
         }]))
@@ -186,6 +188,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         console.log(err)
       }
     }
+    setWaitForReponse(false)
   }
 
 
@@ -307,7 +310,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
           <Messages messages={messages} me={me} />
           {typing ? <TypingIndicator members={[{ name: travelerData ? travelerData.name : serverName }]} /> : ""}
           <Input
-            chatDisabled={chatDisabled}
+            chatDisabled={chatDisabled || waitForResponse}
             onSendMessage={onSendMessage}
             inputBox={inputBox}
           />
