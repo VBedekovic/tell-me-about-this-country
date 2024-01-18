@@ -7,7 +7,7 @@ import {
 } from "react-simple-maps";
 import "../App.css"
 
-const MapChart = ({ content, setTooltipContent, mapSettings, trainingMode, setSelectedCountry, gameOverFlag }) => {
+const MapChart = ({ content, setTooltipContent, mapSettings, trainingMode, setSelectedCountry, gameOverFlag = false }) => {
   const [settings, setSettings] = useState(mapSettings)
   const [mapStyle, setMapStyle] = useState("")
 
@@ -50,7 +50,9 @@ const MapChart = ({ content, setTooltipContent, mapSettings, trainingMode, setSe
         rotation: [-11, 0, 0],
       }}
         width={800}
-        height={500}>
+        height={500}
+        style={gameOverFlag ? {} : { height: "75vh", margin: "auto", width: "100%" }}
+      >
         <ZoomableGroup zoom={settings.zoom} center={settings.center}>
           <Geographies geography={`/${settings.region}.json`}>
             {({ geographies }) =>

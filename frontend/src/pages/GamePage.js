@@ -272,7 +272,7 @@ function GamePage() {
         <><Button variant='contained' sx={{ position: "absolute", fontFamily: "var(--primary-font)", backgroundColor: "var(--primary-accent)", margin: "5px" }} href="/">{"< Natrag"}</Button>
           <Box sx={{ display: "flex", flexDirection: "row" }}>
             <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-              <div style={{ flex: "0 0 75%" }}>
+              <div style={{ flex: "0 0 auto" }}>
                 <MapChart setTooltipContent={setContent}
                   content={content} mapSettings={regionSettings} trainingMode={false} />
                 <ReactTooltip id={content}
@@ -281,7 +281,7 @@ function GamePage() {
                   offset={content === "Russia" ? "" : ""}
                 />
               </div>
-              <StatusBar style={{ flex: "0 0 18%" }} selectedRegion={{ name: selectedRegion.toUpperCase(), color: "var(--primary-accent)" }} gameOverFlag={gameOver} setTimerGameOver={setGameOverTimer} questions={questions}></StatusBar>
+              <StatusBar style={{ flex: "0 0 auto" }} selectedRegion={{ name: selectedRegion.toUpperCase(), color: "var(--primary-accent)" }} gameOverFlag={gameOver} setTimerGameOver={setGameOverTimer} questions={questions}></StatusBar>
             </Box>
             <Chat sx={{ maxHeight: "95%", margin: "5px" }} trainingMode={false} chatDisabled={false} setGameOverInfo={setGameOverInfo} setQuestionsInfo={setQuestions} regionOrContinent={selectedRegion}></Chat>
           </Box></>

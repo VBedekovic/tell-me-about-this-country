@@ -74,7 +74,7 @@ function StatusBar({ selectedRegion, gameOverFlag, setTimerGameOver, questions }
                 QUESTIONS LEFT
               </Typography>
               <Typography variant="h6" color={region.color} sx={{ mb: 1.5, fontFamily: "var(--primary-font)" }}>
-                {currentCategory.name ? currentCategory.name : "--"}: {currentCategory.left || currentCategory.left === 0 ? currentCategory.left : "--"}
+                {currentCategory.name ? currentCategory.name.toUpperCase() : "--"}: {currentCategory.left || currentCategory.left === 0 ? currentCategory.left : "--"}
                 <br />
               </Typography>
             </Grid>

@@ -46,7 +46,7 @@ function TrainingPage() {
       <Button variant='contained' sx={{ position: "absolute", fontFamily: "var(--primary-font)", backgroundColor: "var(--primary-accent)", margin: "5px" }} href="/">{"< Natrag"}</Button>
       <Box sx={{ display: "flex", flexDirection: "row" }}>
         <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-          <div style={{ flex: "0 0 80%" }}>
+          <div style={{ flex: "0 0 auto" }}>
             <MapChart setTooltipContent={setContent}
               content={content} mapSettings={regionSettings} trainingMode={true} setSelectedCountry={setSelectedCountry} />
             <ReactTooltip id={content}
@@ -55,7 +55,7 @@ function TrainingPage() {
               offset={content === "Russia" ? "" : ""}
             />
           </div>
-          <StatusBarTraining style={{ flex: "0 0 18%" }} selectedCountry={selectedCountry.toUpperCase()}></StatusBarTraining>
+          <StatusBarTraining style={{ position: "absolute", bottom: "0px" }} selectedCountry={selectedCountry.toUpperCase()}></StatusBarTraining>
         </Box>
         <Chat sx={{ maxHeight: "95%", filter: "blur(8px)" }} trainingMode={true} chatDisabled={chatDisabled} selectedCountry={selectedCountry}></Chat>
       </Box>
