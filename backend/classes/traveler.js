@@ -101,6 +101,9 @@ class Traveler {
         if (!openaiResponse.flags.includes("correct_guess"))
             openaiResponse.answer = censorCountryName(openaiResponse.answer, this.traveledToCountry);
 
+        if (openaiResponse.flags.includes("correct_guess") || this.guessChancesCount <= 0)
+            openaiResponse.country = this.getTraveledToCountry();
+
         return openaiResponse
     }
 
