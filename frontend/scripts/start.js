@@ -152,3 +152,6 @@ checkBrowsers(paths.appPath, isInteractive)
     }
     process.exit(1);
   });
+
+process.env.NODE_ENV = 'development';
+process.env.BABEL_ENV = 'development';
