@@ -57,7 +57,7 @@ function TrainingPage() {
           </div>
           <StatusBarTraining selectedCountry={selectedCountry.toUpperCase()}></StatusBarTraining>
         </Box>
-        <Chat sx={{ maxHeight: "95%", filter: "blur(8px)" }} trainingMode={true} chatDisabled={chatDisabled}></Chat>
+        <Chat sx={{ maxHeight: "95%", filter: "blur(8px)" }} trainingMode={true} chatDisabled={chatDisabled} selectedCountry={selectedCountry}></Chat>
       </Box>
     </>
   )

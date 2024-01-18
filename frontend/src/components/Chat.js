@@ -7,9 +7,7 @@ import { countries } from "country-list-json";
 import { Box, Card, Typography, Popover } from "@mui/material";
 
 
-const apiLink = process.env.APILINK
-
-
+const apiLink = process.env.APILINK || "http://localhost:8080"
 
 function randomName() {
   const adjectives = [
@@ -70,6 +68,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
   const [anchorEl, setAnchorEl] = useState(null);
   const [inputBox, setInputBox] = useState("")
   const [travelerData, setTravelerData] = useState(null)
+  const [trainingSelectedCountry, setTrainingSelectedCountry] = useState(null)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -107,7 +106,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
             },
             body: JSON.stringify({
               question: message,
-              country: selectedCountry
+              country: trainingSelectedCountry
             })
           })
         //dodati kak vec ide ovaj jsonData objekt
@@ -152,16 +151,16 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
             id: '1',
             clientData: {
               color: serverColor,
-              username: serverName,
+              username: travelerData.name ? travelerData.name : serverName,
             },
           },
         }]))
         setQuestionsInfo(jsonData.category_chances_dict)
         if (jsonData.flags.includes("correct_guess")) {
-          setGameOverInfo({ ...jsonData, status: "winner" })
+          setGameOverInfo({ ...jsonData, status: "winner", color: "green" })
         }
         if (jsonData.guess_chances_count === 0 && jsonData.flags.includes("wrong_guess")) {
-          setGameOverInfo({ ...jsonData, status: "loser" })
+          setGameOverInfo({ ...jsonData, status: "loser", color: "red" })
         }
 
         /*let gameOverFlag = true
@@ -182,6 +181,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
     }
   }
 
+
   const fetchQuestionIdeas = async (event) => {
     try {
       setAnchorEl(event.currentTarget);
@@ -195,7 +195,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         })
       const jsonData = await response.json();
       console.log(jsonData)
-      setQuestions(jsonData.questionArray)
+      setQuestions(jsonData.questionsArray)
 
     } catch (err) {
       console.log(err)
@@ -217,6 +217,19 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         })
 
       const jsonData = await response.json();
+      if (jsonData) {
+        const response2 = await fetch(`${apiLink}/traveler-v1/current-traveler-category-chances`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-type": "application/json"
+            }
+          })
+        const jsonData = await response2.json();
+        console.log(jsonData)
+        setQuestionsInfo(jsonData)
+      }
       setTravelerData(jsonData)
     } catch (err) {
       console.log(err)
@@ -235,8 +248,12 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
 
   // init traveler if game mode
   useEffect(() => {
-    if (!trainingMode) initTraveler()
-  }, [])
+    if (!trainingMode && regionOrContinent) initTraveler()
+  }, [regionOrContinent])
+
+  useEffect(() => {
+    setTrainingSelectedCountry(selectedCountry)
+  }, [selectedCountry])
 
   return (
     <>

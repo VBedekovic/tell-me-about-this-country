@@ -9,6 +9,8 @@ import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 import "../App.css"
 
+const apiLink = process.env.APILINK || "http://localhost:8080"
+
 function StatusBar({ selectedRegion, gameOverFlag, setTimerGameOver, questions }) {
   const [region, setRegion] = useState(selectedRegion)
   const [questionsUsed, setQuestionsUsed] = useState(0)
@@ -36,7 +38,7 @@ function StatusBar({ selectedRegion, gameOverFlag, setTimerGameOver, questions }
   }, [gameOverFlag, setTimerGameOver])
 
   useEffect(() => {
-    setCategories(Object.keys(questions).map(key => { return { name: key, left: questions[key] } }))
+    if (questions) setCategories(Object.keys(questions).map(key => { return { name: key, left: questions[key] } }))
   }, [questions])
 
   return (

@@ -31,11 +31,7 @@ function GamePage() {
   const [gameOverInfo, setGameOverInfo] = useState("")
   const [gameOverTimer, setGameOverTimer] = useState(false)
   const [questions, setQuestions] = useState({
-    "history": 5,
-    "geography": 5,
-    "economics": 5,
-    "media&sports": 5,
-    "statistics": 5
+    "loading": 0
   })
 
   const [gameOver, setGameOver] = useState(false);
@@ -200,7 +196,7 @@ function GamePage() {
                 <Typography variant='h6' sx={{ mb: 1.5, fontFamily: "var(--primary-font)", fontWeight: "bold" }} color="text.secondary">
                   STATUS
                 </Typography>
-                <Typography variant="h6" sx={{ mb: 1.5, fontFamily: "var(--primary-font)", color: gameOver.status === "winner" ? "green" : "red" }}>
+                <Typography variant="h6" sx={{ mb: 1.5, fontFamily: "var(--primary-font)", color: gameOverInfo.color ? gameOverInfo.color : "" }}>
                   {gameOverInfo.status ? gameOverInfo.status.toUpperCase() : ""}
                   <br />
                 </Typography>
@@ -217,7 +213,7 @@ function GamePage() {
                   COUNTRY
                 </Typography>
                 <Typography variant="h6" sx={{ mb: 1.5, fontFamily: "var(--primary-font)" }}>
-                  {gameOverInfo.country ? gameOver.country : ""}
+                  {gameOverInfo.country ? gameOverInfo.country : ""}
                   <br />
                 </Typography>
               </Grid>
@@ -255,7 +251,7 @@ function GamePage() {
               </Grid>
             </CardContent>
           </Card>
-          <MapChart setTooltipContent={setContent} content={content} mapSettings={regionSettings} trainingMode={false} gameOverFlag={"Italy"} />
+          <MapChart setTooltipContent={setContent} content={content} mapSettings={regionSettings} trainingMode={false} gameOverFlag={gameOverInfo.country} />
           <ReactTooltip id={content}
             place="bottom"
             content={content}
@@ -287,7 +283,7 @@ function GamePage() {
               </div>
               <StatusBar selectedRegion={{ name: selectedRegion.toUpperCase(), color: "var(--primary-accent)" }} gameOverFlag={gameOver} setTimerGameOver={setGameOverTimer} questions={questions}></StatusBar>
             </Box>
-            <Chat sx={{ maxHeight: "95%", margin: "5px" }} trainingMode={false} chatDisabled={false} setGameOverInfo={setGameOverInfo} setQuestionsInfo={setQuestions}></Chat>
+            <Chat sx={{ maxHeight: "95%", margin: "5px" }} trainingMode={false} chatDisabled={false} setGameOverInfo={setGameOverInfo} setQuestionsInfo={setQuestions} regionOrContinent={selectedRegion}></Chat>
           </Box></>
         : <></>}
     </>
