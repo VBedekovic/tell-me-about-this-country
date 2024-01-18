@@ -308,7 +308,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
 
         <div className="appContent" >
           <Messages messages={messages} me={me} />
-          {typing ? <TypingIndicator members={[{ name: travelerData ? travelerData.name : serverName }]} /> : ""}
+          {typing ? <TypingIndicator members={[{ name: travelerData ? travelerData.name : "Tour guide" }]} /> : ""}
           <Input
             chatDisabled={chatDisabled || waitForResponse}
             onSendMessage={onSendMessage}
