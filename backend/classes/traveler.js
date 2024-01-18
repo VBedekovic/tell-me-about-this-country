@@ -72,6 +72,10 @@ class Traveler {
         return this.categoryChancesDict
     }
 
+    getGuessChancesCount() {
+        return this.guessChancesCount
+    }
+
     async askQuestion(question) {
         const promptResult = 
             await requestAIModelResponse(travelerSkeletonPrompt(
