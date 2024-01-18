@@ -17,7 +17,15 @@ const { travelerMiddleware } = require('./services/travelerTestService');
 app.use('/traveler-v1', travelerMiddleware, travelerAPI);
 
 
-app.get('*', (req, res) => {
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/training', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+app.get('/game', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
