@@ -42,6 +42,7 @@ const travelerMiddleware = (req, res, next) => {
             console.log(t.getInfo())
             console.log(t.getCategoryChancesDict())
             console.log("In country:", t.getTraveledToCountry())
+            console.log("Left guess chances:", t.guessChancesCount)
         } else {
             console.log('No traveler initiated.');
         }
@@ -67,6 +68,10 @@ function initCategoryChancesDict(numberOfchances = 3) {
         'media&sports': numberOfchances,
         "statistics": numberOfchances,
     }
+}
+
+function initGuessChancesNumber(numberOfchances = 3) {
+    return numberOfchances;
 }
 
 
@@ -131,6 +136,7 @@ module.exports = {
     setCurrentTraveler,
     getCurrentTraveler,
     initCategoryChancesDict,
+    initGuessChancesNumber,
     getAllContinents,
     getAllRegions,
     getRandomPersonalityTraits,

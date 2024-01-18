@@ -1,6 +1,6 @@
 const { requestAIModelResponse } = require("../services/openaiApiService");
 const { travelerSkeletonPrompt, travelerChooseCountryPrompt } = require("../services/promtBuilderService");
-const { initCategoryChancesDict, getRandomGender, getRandomName, getRandomPersonalityTraits, censorCountryName } = require("../services/travelerTestService");
+const { initCategoryChancesDict, getRandomGender, getRandomName, getRandomPersonalityTraits, censorCountryName, initGuessChancesNumber } = require("../services/travelerTestService");
 
 const NUM_OF_PERSONALITY_TRAITS = 3
 
@@ -25,6 +25,7 @@ class Traveler {
         this.traveledToCountry = traveledToCountry
 
         this.categoryChancesDict = initCategoryChancesDict()
+        this.guessChancesCount = initGuessChancesNumber()
     }
 
     static async createTraveler(gender, name, personalityTraits, regionOrContinent) {
@@ -89,9 +90,13 @@ class Traveler {
         if (openaiResponse.answered_category !== null) {
             // DANGER Potential openai error
             if (this.categoryChancesDict[openaiResponse.answered_category] > 0) 
-                this.categoryChancesDict[openaiResponse.answered_category] -= 1;
+                this.categoryChancesDict[openaiResponse.answered_category] -= 1;   
         }
+        if (openaiResponse.flags.includes("wrong_guess"))
+            this.guessChancesCount -= 1;
         openaiResponse.category_chances_dict = this.categoryChancesDict;
+        openaiResponse.guess_chances_count = this.guessChancesCount;
+ 
 
         if (!openaiResponse.flags.includes("correct_guess"))
             openaiResponse.answer = censorCountryName(openaiResponse.answer, this.traveledToCountry);
