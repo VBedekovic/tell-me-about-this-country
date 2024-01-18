@@ -42,6 +42,12 @@ router.get('/current-traveler-category-chances', async (req, res) => {
     res.status(200).json(getCurrentTraveler().getCategoryChancesDict())
 })
 
+router.get('/current-traveler-guess-chances', async (req, res) => {
+    res.status(200).json({
+        guess_chances_count: getCurrentTraveler().getGuessChancesCount()
+    })
+})
+
 
 //Expected request body:
 /*

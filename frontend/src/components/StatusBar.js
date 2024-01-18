@@ -11,10 +11,11 @@ import "../App.css"
 
 const apiLink = process.env.APILINK || "http://localhost:8080"
 
-function StatusBar({ selectedRegion, gameOverFlag, setTimerGameOver, questions }) {
+function StatusBar({ selectedRegion, gameOverFlag, setTimerGameOver, questions, guesses }) {
   const [region, setRegion] = useState(selectedRegion)
   const [questionsUsed, setQuestionsUsed] = useState(0)
   const [timer, setTimer] = useState(0)
+  const [guessesLeft, setGuessesLeft] = useState("")
   // add this to questions format Object.keys(questions).map(key => { return { name: key, left: questions[key] } })
   //const [categories, setCategory] = useState([{ name: "History", left: 5 }, { name: "Geographical", left: 4 }])
   const [categories, setCategories] = useState(Object.keys(questions).map(key => { return { name: key, left: questions[key] } }))
@@ -40,6 +41,10 @@ function StatusBar({ selectedRegion, gameOverFlag, setTimerGameOver, questions }
   useEffect(() => {
     if (questions) setCategories(Object.keys(questions).map(key => { return { name: key, left: questions[key] } }))
   }, [questions])
+
+  useEffect(() => {
+    if (guesses) setGuessesLeft(guesses)
+  }, [guesses])
 
   return (
     <>
@@ -74,7 +79,24 @@ function StatusBar({ selectedRegion, gameOverFlag, setTimerGameOver, questions }
                 QUESTIONS LEFT
               </Typography>
               <Typography variant="h6" color={region.color} sx={{ mb: 1.5, fontFamily: "var(--primary-font)" }}>
-                {currentCategory.name ? currentCategory.name : "--"}: {currentCategory.left || currentCategory.left === 0 ? currentCategory.left : "--"}
+                {currentCategory.name ? currentCategory.name.toUpperCase() : "--"}: {currentCategory.left || currentCategory.left === 0 ? currentCategory.left : "--"}
+                <br />
+              </Typography>
+            </Grid>
+          </CardContent>
+          <CardContent>
+            <br />
+            <Grid
+              container
+              spacing={0}
+              direction="column"
+              alignItems="center"
+              justifyContent="center">
+              <Typography variant='h5' sx={{ mb: 1.5, fontFamily: "var(--primary-font)", fontWeight: "bold" }} color="text.secondary">
+                GUESSES LEFT
+              </Typography>
+              <Typography variant="h6" color={region.color} sx={{ mb: 1.5, fontFamily: "var(--primary-font)" }}>
+                {guessesLeft || guessesLeft === 0 ? guessesLeft : "--"}
                 <br />
               </Typography>
             </Grid>

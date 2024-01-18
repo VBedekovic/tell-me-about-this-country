@@ -48,7 +48,7 @@ let myName = randomName()
 let serverColor = randomColor()
 let serverName = randomName()
 
-function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = null, setQuestionsInfo, regionOrContinent }) {
+function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = null, setQuestionsInfo, regionOrContinent, setGuessesInfo }) {
   const [messages, setMessages] = useState(trainingMode ? [{
     id: '1',
     data: 'Hello I am your tour guide, try asking me a question!',
@@ -56,7 +56,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
       id: '1',
       clientData: {
         color: serverColor,
-        username: serverName,
+        username: "Tour guide",
       },
     },
   }] : []);
@@ -71,6 +71,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
   const [travelerData, setTravelerData] = useState(null)
   const [trainingSelectedCountry, setTrainingSelectedCountry] = useState(null)
   const [typing, setTyping] = useState(false)
+  const [waitForResponse, setWaitForReponse] = useState(null)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -97,6 +98,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
       },
     }]))
     setTyping(true)
+    setWaitForReponse(true)
     if (trainingMode) {
       try {
         // add real app link from env
@@ -124,7 +126,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
             id: '1',
             clientData: {
               color: serverColor,
-              username: serverName,
+              username: "Tour guide",
             },
           },
         }]))
@@ -162,6 +164,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
           },
         }]))
         setQuestionsInfo(jsonData.category_chances_dict)
+        setGuessesInfo(jsonData.guess_chances_count)
         if (jsonData.flags.includes("correct_guess")) {
           setGameOverInfo({ ...jsonData, status: "winner", color: "green" })
         }
@@ -186,6 +189,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         console.log(err)
       }
     }
+    setWaitForReponse(false)
   }
 
 
@@ -235,6 +239,19 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         const jsonData = await response2.json();
         console.log(jsonData)
         setQuestionsInfo(jsonData)
+      }
+      if (jsonData) {
+        const response3 = await fetch(`${apiLink}/traveler-v1/current-traveler-guess-chances`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-type": "application/json"
+            }
+          })
+        const jsonData = await response3.json();
+        console.log(jsonData)
+        setGuessesInfo(jsonData.guess_chances_count)
       }
       setMessages([{
         id: '1',
@@ -305,9 +322,9 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
 
         <div className="appContent" >
           <Messages messages={messages} me={me} />
-          {typing ? <TypingIndicator members={[{ name: travelerData ? travelerData.name : serverName }]} /> : ""}
+          {typing ? <TypingIndicator members={[{ name: travelerData ? travelerData.name : "Tour guide" }]} /> : ""}
           <Input
-            chatDisabled={chatDisabled}
+            chatDisabled={chatDisabled || waitForResponse}
             onSendMessage={onSendMessage}
             inputBox={inputBox}
           />

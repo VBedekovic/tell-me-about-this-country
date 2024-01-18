@@ -33,6 +33,7 @@ function GamePage() {
   const [questions, setQuestions] = useState({
     "loading": 0
   })
+  const [guesses, setGuesses] = useState(false)
 
   const [gameOver, setGameOver] = useState(false);
   const handleOpenGameOver = () => setGameOver(true);
@@ -242,7 +243,7 @@ function GamePage() {
                 alignItems="center"
                 justifyContent="center">
                 <Typography variant='h6' sx={{ mb: 1.5, fontFamily: "var(--primary-font)", fontWeight: "bold" }} color="text.secondary">
-                  TIME LEFT
+                  TIME
                 </Typography>
                 <Typography variant="h6" sx={{ mb: 1.5, fontFamily: "var(--primary-font)" }}>
                   {gameOverTimer} s
@@ -272,7 +273,7 @@ function GamePage() {
         <><Button variant='contained' sx={{ position: "absolute", fontFamily: "var(--primary-font)", backgroundColor: "var(--primary-accent)", margin: "5px" }} href="/">{"< Natrag"}</Button>
           <Box sx={{ display: "flex", flexDirection: "row" }}>
             <Box sx={{ flexGrow: 1, display: "flex", flexDirection: "column" }}>
-              <div>
+              <div style={{ flex: "0 0 auto" }}>
                 <MapChart setTooltipContent={setContent}
                   content={content} mapSettings={regionSettings} trainingMode={false} />
                 <ReactTooltip id={content}
@@ -281,9 +282,9 @@ function GamePage() {
                   offset={content === "Russia" ? "" : ""}
                 />
               </div>
-              <StatusBar selectedRegion={{ name: selectedRegion.toUpperCase(), color: "var(--primary-accent)" }} gameOverFlag={gameOver} setTimerGameOver={setGameOverTimer} questions={questions}></StatusBar>
+              <StatusBar style={{ flex: "0 0 auto" }} selectedRegion={{ name: selectedRegion.toUpperCase(), color: "var(--primary-accent)" }} gameOverFlag={gameOver} setTimerGameOver={setGameOverTimer} questions={questions} guesses={guesses}></StatusBar>
             </Box>
-            <Chat sx={{ maxHeight: "95%", margin: "5px" }} trainingMode={false} chatDisabled={false} setGameOverInfo={setGameOverInfo} setQuestionsInfo={setQuestions} regionOrContinent={selectedRegion}></Chat>
+            <Chat sx={{ maxHeight: "95%", margin: "5px" }} trainingMode={false} chatDisabled={false} setGameOverInfo={setGameOverInfo} setQuestionsInfo={setQuestions} regionOrContinent={selectedRegion} setGuessesInfo={setGuesses}></Chat>
           </Box></>
         : <></>}
     </>
