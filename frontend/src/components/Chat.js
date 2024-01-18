@@ -2,8 +2,10 @@ import React, { Fragment, useState, useEffect } from "react";
 import Messages from "./Messages";
 import Input from "./Input";
 import '../Chat-styles.css';
+import "../App.css"
 import { countries } from "country-list-json";
 import { Box, Card, Typography, Popover } from "@mui/material";
+
 
 const apiLink = process.env.APILINK
 
@@ -47,7 +49,7 @@ let myName = randomName()
 let serverColor = randomColor()
 let serverName = randomName()
 
-function Chat({ trainingMode }) {
+function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = null, setQuestionsInfo, regionOrContinent }) {
   const [messages, setMessages] = useState([{
     id: '1',
     data: 'This is a test message!',
@@ -61,12 +63,13 @@ function Chat({ trainingMode }) {
   }]);
   const [me, setMe] = useState({
     id: '2',
-    username: myName,
+    username: "Player",
     color: myColor,
   });
   const [questions, setQuestions] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null);
   const [inputBox, setInputBox] = useState("")
+  const [travelerData, setTravelerData] = useState(null)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -92,44 +95,96 @@ function Chat({ trainingMode }) {
         },
       },
     }]))
-    try {
-      // add real app link from env
-      const response = await fetch(`${apiLink}/ask-aquestion`,
-        {
-          method: "POST",
-          mode: "cors",
-          headers: {
-            "Content-type": "application/json"
-          },
-          body: JSON.stringify({
-            question: message,
-            country: "Croatia"
+    if (trainingMode) {
+      try {
+        // add real app link from env
+        const response = await fetch(`${apiLink}/tour-guide-v1/ask-question`,
+          {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+              question: message,
+              country: selectedCountry
+            })
           })
-        }).catch(err => { })
-      //dodati kak vec ide ovaj jsonData objekt
-      //const jsonData = await response.json();
-      //console.log(jsonData)
-      setMessages(previousMessages => ([...previousMessages, {
-        id: Math.random(),
-        data: 'Test response',
-        member: {
-          id: '1',
-          clientData: {
-            color: serverColor,
-            username: serverName,
+        //dodati kak vec ide ovaj jsonData objekt
+        const jsonData = await response.json();
+        console.log(jsonData)
+        setMessages(previousMessages => ([...previousMessages, {
+          id: Math.random(),
+          data: jsonData.answer,
+          member: {
+            id: '1',
+            clientData: {
+              color: serverColor,
+              username: serverName,
+            },
           },
-        },
-      }]))
-    } catch (err) {
-      console.log(err)
-    }
+        }]))
+      } catch (err) {
+        console.log(err)
+      }
 
+    } else {
+      try {
+        // add real app link from env
+        const response = await fetch(`${apiLink}/traveler-v1/ask-question`,
+          {
+            method: "POST",
+            mode: "cors",
+            headers: {
+              "Content-type": "application/json"
+            },
+            body: JSON.stringify({
+              question: message
+            })
+          })
+        //dodati kak vec ide ovaj jsonData objekt
+        const jsonData = await response.json();
+        console.log(jsonData)
+        setMessages(previousMessages => ([...previousMessages, {
+          id: Math.random(),
+          data: jsonData.answer,
+          member: {
+            id: '1',
+            clientData: {
+              color: serverColor,
+              username: serverName,
+            },
+          },
+        }]))
+        setQuestionsInfo(jsonData.category_chances_dict)
+        if (jsonData.flags.includes("correct_guess")) {
+          setGameOverInfo({ ...jsonData, status: "winner" })
+        }
+        if (jsonData.guess_chances_count === 0 && jsonData.flags.includes("wrong_guess")) {
+          setGameOverInfo({ ...jsonData, status: "loser" })
+        }
+
+        /*let gameOverFlag = true
+        if (gameOverFlag) {
+          setGameOverInfo({
+            category_chances_dict: {
+              "history": 2,
+              "geography": 0,
+              "economics": 3,
+              "media&sports": 2,
+              "statistics": 3
+            }, gameOver: true
+          })
+        }*/
+      } catch (err) {
+        console.log(err)
+      }
+    }
   }
 
   const fetchQuestionIdeas = async (event) => {
     try {
       setAnchorEl(event.currentTarget);
-      setQuestions(["Hello, is this question working aite???", "Hello, is this question working aite?", "Hello, is this question working aite?"])
       const response = await fetch(`${apiLink}/tour-guide-v1/n-random-questions/3`,
         {
           method: "GET",
@@ -140,8 +195,29 @@ function Chat({ trainingMode }) {
         })
       const jsonData = await response.json();
       console.log(jsonData)
-      setQuestions(jsonData)
+      setQuestions(jsonData.questionArray)
 
+    } catch (err) {
+      console.log(err)
+    }
+  }
+
+  const initTraveler = async () => {
+    try {
+      const response = await fetch(`${apiLink}/traveler-v1/init-traveler`,
+        {
+          method: "POST",
+          mode: "cors",
+          headers: {
+            "Content-type": "application/json"
+          },
+          body: JSON.stringify({
+            regionOrContinent: regionOrContinent
+          })
+        })
+
+      const jsonData = await response.json();
+      setTravelerData(jsonData)
     } catch (err) {
       console.log(err)
     }
@@ -153,6 +229,15 @@ function Chat({ trainingMode }) {
     setInputBox(event.target.innerHTML)
   }
 
+  useEffect(() => {
+    console.log(chatDisabled)
+  }, [chatDisabled])
+
+  // init traveler if game mode
+  useEffect(() => {
+    if (!trainingMode) initTraveler()
+  }, [])
+
   return (
     <>
       <head>
@@ -162,10 +247,10 @@ function Chat({ trainingMode }) {
         <script type='text/javascript' src='https://cdn.scaledrone.com/scaledrone.min.js' />
         <link rel='icon' href='/favicon.ico' />
       </head>
-      <main className="app">
-        {trainingMode ? <Box sx={{ minHeight: "8%", minWidth: "95%", padding: "5px" }}>
+      <Card className="app" sx={{ margin: "0px" }}>
+        {trainingMode && !chatDisabled ? <Box sx={{ minHeight: "5%", minWidth: "95%", padding: "5px" }}>
           <Card onClick={fetchQuestionIdeas} sx={{ height: "90%", width: "100%", display: "flex", flexDirection: "column", cursor: "pointer" }}>
-            <Typography variant="h5" sx={{ margin: "auto" }}>Question ideas</Typography>
+            <Typography variant="h6" color="text.secondary" sx={{ margin: "auto", fontFamily: "var(--primary-font)" }}>QUESTION IDEAS</Typography>
           </Card>
         </Box> : <></>}
         <Popover
@@ -179,19 +264,20 @@ function Chat({ trainingMode }) {
           style={{ width: "100%", margin: "auto", padding: "5px" }}
         >
           {Object.values(questions).map(question => {
-            return (<Typography onClick={handleChooseMessage} sx={{ p: 2, width: "100%", cursor: "pointer", transition: "background-color 0.5s", ":hover": { backgroundColor: "rgba(99,99,191,.07)" } }}>{question}</Typography>
+            return (<Typography onClick={handleChooseMessage} sx={{ p: 2, width: "100%", cursor: "pointer", transition: "background-color 0.5s", ":hover": { backgroundColor: "rgba(99,99,191,.07)" }, fontFamily: "var(--primary-font)" }}>{question}</Typography>
             )
           })}
         </Popover>
 
-        <div className="appContent" style={{}}>
+        <div className="appContent" >
           <Messages messages={messages} me={me} />
           <Input
+            chatDisabled={chatDisabled}
             onSendMessage={onSendMessage}
             inputBox={inputBox}
           />
         </div>
-      </main>
+      </Card>
     </>
   )
 

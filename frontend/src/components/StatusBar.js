@@ -9,12 +9,14 @@ import Typography from '@mui/material/Typography';
 import { Grid } from '@mui/material';
 import "../App.css"
 
-function StatusBar({ selectedRegion }) {
+function StatusBar({ selectedRegion, gameOverFlag, setTimerGameOver, questions }) {
   const [region, setRegion] = useState(selectedRegion)
   const [questionsUsed, setQuestionsUsed] = useState(0)
   const [timer, setTimer] = useState(0)
-  const [categories, setCategory] = useState([{ name: "History", left: 5 }, { name: "Geographical", left: 4 }])
-  const [currentCategory, setCurrentCategory] = useState({ name: "History", left: 5 })
+  // add this to questions format Object.keys(questions).map(key => { return { name: key, left: questions[key] } })
+  //const [categories, setCategory] = useState([{ name: "History", left: 5 }, { name: "Geographical", left: 4 }])
+  const [categories, setCategories] = useState(Object.keys(questions).map(key => { return { name: key, left: questions[key] } }))
+  const [currentCategory, setCurrentCategory] = useState({ name: "", left: "" })
   const [categoryNumber, setCategoryNumber] = useState(0)
 
   useEffect(() => {
@@ -28,6 +30,15 @@ function StatusBar({ selectedRegion }) {
     }, 1000);
   }, [categories, categoryNumber]);
 
+  useEffect(() => {
+    if (gameOverFlag)
+      setTimerGameOver(timer)
+  }, [gameOverFlag, setTimerGameOver])
+
+  useEffect(() => {
+    setCategories(Object.keys(questions).map(key => { return { name: key, left: questions[key] } }))
+  }, [questions])
+
   return (
     <>
       <Box sx={{ margin: "auto", width: "99%" }}>
@@ -40,10 +51,10 @@ function StatusBar({ selectedRegion }) {
               direction="column"
               alignItems="center"
               justifyContent="center">
-              <Typography variant='h5' sx={{ mb: 1.5, fontFamily: "Montserrat", fontWeight: "bold" }} color="text.secondary">
-                DIFFICULTY
+              <Typography variant='h5' sx={{ mb: 1.5, fontFamily: "var(--primary-font)", fontWeight: "bold" }} color="text.secondary">
+                REGION
               </Typography>
-              <Typography variant="h6" color={region.color} sx={{ mb: 1.5, fontFamily: "Montserrat" }}>
+              <Typography variant="h6" color={region.color} sx={{ mb: 1.5, fontFamily: "var(--primary-font)" }}>
                 {region.name}
                 <br />
               </Typography>
@@ -57,11 +68,11 @@ function StatusBar({ selectedRegion }) {
               direction="column"
               alignItems="center"
               justifyContent="center">
-              <Typography variant='h5' sx={{ mb: 1.5, fontFamily: "Pixelify Sans" }} color="text.secondary">
+              <Typography variant='h5' sx={{ mb: 1.5, fontFamily: "var(--primary-font)", fontWeight: "bold" }} color="text.secondary">
                 QUESTIONS LEFT
               </Typography>
-              <Typography variant="h6" color={region.color} sx={{ mb: 1.5, fontFamily: "Pixelify Sans" }}>
-                {currentCategory.name}: {currentCategory.left}
+              <Typography variant="h6" color={region.color} sx={{ mb: 1.5, fontFamily: "var(--primary-font)" }}>
+                {currentCategory.name ? currentCategory.name : "--"}: {currentCategory.left || currentCategory.left === 0 ? currentCategory.left : "--"}
                 <br />
               </Typography>
             </Grid>
@@ -74,10 +85,10 @@ function StatusBar({ selectedRegion }) {
               direction="column"
               alignItems="center"
               justifyContent="center">
-              <Typography variant='h5' sx={{ mb: 1.5, fontFamily: "Pixelify Sans" }} color="text.secondary">
+              <Typography variant='h5' sx={{ mb: 1.5, fontFamily: "var(--primary-font)", fontWeight: "bold" }} color="text.secondary">
                 SECONDS PASSED
               </Typography>
-              <Typography variant="h6" color={region.color} sx={{ mb: 1.5, fontFamily: "Pixelify Sans" }}>
+              <Typography variant="h6" color={region.color} sx={{ mb: 1.5, fontFamily: "var(--primary-font)" }}>
                 {timer}
                 <br />
               </Typography>

@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import React from 'react';
 import '../Chat-styles.css'
+import "../App.css"
 
 export default function Messages({ messages, me }) {
   const bottomRef = useRef(null);

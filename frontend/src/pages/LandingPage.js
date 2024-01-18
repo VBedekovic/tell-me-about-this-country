@@ -37,14 +37,13 @@ function LandingPage() {
 
   return (
     <>
-
-      <Box style={{ background: "content-box radial-gradient(orange, white)", width: "100%", height: "100vh", display: "flex", flexDirection: "column", alignContent: "space-between" }}>
-        <Typography variant="h2" fontFamily="Bungee Spice" sx={{ margin: "auto" }}>Tell me about this country</Typography>
+      <Box></Box>
+      <Box className="background-image" style={{ width: "100%", height: "100vh", display: "flex", flexDirection: "column", alignContent: "space-between" }}>
+        <Typography variant="h2" color="text.secondary" fontFamily="Play" sx={{ margin: "auto", fontWeight: "bold" }}>{"Tell me about this country".toUpperCase()}</Typography>
         <Box style={{ margin: "auto", flex: "0 0 60%" }}>
           <Button size="large"
             variant="contained"
-            color="error"
-            style={{ fontFamily: "Pixelify Sans", fontSize: "30px", minWidth: "300px", minHeight: "100px" }}
+            style={{ fontFamily: "var(--primary-font)", fontSize: "30px", minWidth: "300px", minHeight: "100px", backgroundColor: "var(--primary-accent)" }}
             onClick={navigateToGameScreen}>
             Start game
           </Button>
@@ -52,7 +51,7 @@ function LandingPage() {
           <br />
           <br />
           <Button size="large" variant="contained" color="error"
-            style={{ fontFamily: "Pixelify Sans", fontSize: "30px", minWidth: "300px", minHeight: "100px" }}
+            style={{ fontFamily: "var(--primary-font)", fontSize: "30px", minWidth: "300px", minHeight: "100px", backgroundColor: "var(--primary-accent)" }}
             onClick={navigateToTrainingScreen}>
             Training
           </Button>
@@ -62,4 +61,5 @@ function LandingPage() {
   );
 }
 
-export default LandingPage;  
+export default LandingPage;
+//background: "content-box radial-gradient(orange, white)" backgroundImage: 'url("world_map_start2.png")', backgroundSize: "100%", filter: "blur(8px)"

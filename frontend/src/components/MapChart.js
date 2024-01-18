@@ -7,7 +7,7 @@ import {
 } from "react-simple-maps";
 import "../App.css"
 
-const MapChart = ({ content, setTooltipContent, mapSettings, trainingMode }) => {
+const MapChart = ({ content, setTooltipContent, mapSettings, trainingMode, setSelectedCountry, gameOverFlag }) => {
   const [settings, setSettings] = useState(mapSettings)
   const [mapStyle, setMapStyle] = useState("")
 
@@ -15,10 +15,10 @@ const MapChart = ({ content, setTooltipContent, mapSettings, trainingMode }) => 
     if (trainingMode) {
       setMapStyle({
         default: {
-          fill: "var(--primary)"
+          fill: "#123456"
         },
         hover: {
-          fill: "var(--primary)"
+          fill: "var(--secondary)"
         },
         pressed: {
           fill: "#F53"
@@ -31,7 +31,7 @@ const MapChart = ({ content, setTooltipContent, mapSettings, trainingMode }) => 
           outline: "none"
         },
         hover: {
-          fill: "#F53",
+          fill: "var(--secondary)",
           outline: "none"
         },
         pressed: {
@@ -42,8 +42,7 @@ const MapChart = ({ content, setTooltipContent, mapSettings, trainingMode }) => 
     }
   }, [trainingMode])
   // dodati 
-  const [gameOver, setGameOver] = useState(false)
-  const [selectedCountry, setSelectedCountry] = useState(null)
+  const [gameOver, setGameOver] = useState(gameOverFlag)
   return (
     <div data-tip="">
       <ComposableMap projectionConfig={{
@@ -60,16 +59,17 @@ const MapChart = ({ content, setTooltipContent, mapSettings, trainingMode }) => 
                   key={geo.rsmKey}
                   data-tooltip-id={content}
                   geography={geo}
-                  onClick={() => console.log("click")}
+                  onClick={() => {
+                    if (trainingMode) setSelectedCountry(geo.properties.name)
+                  }}
                   onMouseEnter={() => {
                     setTooltipContent(`${geo.properties.name}`);
-                    setSelectedCountry(geo.properties.name)
                   }}
                   onMouseLeave={() => {
                     //setTooltipContent("");
                   }}
                   style={mapStyle}
-                  stroke={gameOver && geo.properties.name.toLowerCase() === gameOver ? "#d3d3d3" : ""}
+                  stroke={gameOver && geo.properties.name.toLowerCase() === gameOver.toLowerCase() ? "var(--secondary)" : ""}
                 />
               ))
             }

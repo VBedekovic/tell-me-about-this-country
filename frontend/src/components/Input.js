@@ -1,8 +1,9 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
 import "../Chat-styles.css"
+import "../App.css"
 
-export default function Input({ onSendMessage, inputBox }) {
+export default function Input({ onSendMessage, inputBox, chatDisabled }) {
   const [text, setText] = useState('');
 
   function onChange(e) {
@@ -31,6 +32,7 @@ export default function Input({ onSendMessage, inputBox }) {
           type='text'
           placeholder='Write a question you would like to ask'
           autoFocus
+          disabled={chatDisabled}
         />
         <button>Send</button>
       </form>
