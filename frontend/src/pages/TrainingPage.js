@@ -55,7 +55,7 @@ function TrainingPage() {
               offset={content === "Russia" ? "" : ""}
             />
           </div>
-          <StatusBarTraining style={{ position: "absolute", bottom: "0px" }} selectedCountry={selectedCountry.toUpperCase()}></StatusBarTraining>
+          <StatusBarTraining style={{ flex: "0 0 auto" }} selectedCountry={selectedCountry.toUpperCase()}></StatusBarTraining>
         </Box>
         <Chat sx={{ maxHeight: "95%", filter: "blur(8px)" }} trainingMode={true} chatDisabled={chatDisabled} selectedCountry={selectedCountry}></Chat>
       </Box>

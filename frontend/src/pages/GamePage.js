@@ -33,6 +33,7 @@ function GamePage() {
   const [questions, setQuestions] = useState({
     "loading": 0
   })
+  const [guesses, setGuesses] = useState(false)
 
   const [gameOver, setGameOver] = useState(false);
   const handleOpenGameOver = () => setGameOver(true);
@@ -281,9 +282,9 @@ function GamePage() {
                   offset={content === "Russia" ? "" : ""}
                 />
               </div>
-              <StatusBar style={{ flex: "0 0 auto" }} selectedRegion={{ name: selectedRegion.toUpperCase(), color: "var(--primary-accent)" }} gameOverFlag={gameOver} setTimerGameOver={setGameOverTimer} questions={questions}></StatusBar>
+              <StatusBar style={{ flex: "0 0 auto" }} selectedRegion={{ name: selectedRegion.toUpperCase(), color: "var(--primary-accent)" }} gameOverFlag={gameOver} setTimerGameOver={setGameOverTimer} questions={questions} guesses={guesses}></StatusBar>
             </Box>
-            <Chat sx={{ maxHeight: "95%", margin: "5px" }} trainingMode={false} chatDisabled={false} setGameOverInfo={setGameOverInfo} setQuestionsInfo={setQuestions} regionOrContinent={selectedRegion}></Chat>
+            <Chat sx={{ maxHeight: "95%", margin: "5px" }} trainingMode={false} chatDisabled={false} setGameOverInfo={setGameOverInfo} setQuestionsInfo={setQuestions} regionOrContinent={selectedRegion} setGuessesInfo={setGuesses}></Chat>
           </Box></>
         : <></>}
     </>

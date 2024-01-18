@@ -48,7 +48,7 @@ let myName = randomName()
 let serverColor = randomColor()
 let serverName = randomName()
 
-function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = null, setQuestionsInfo, regionOrContinent }) {
+function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = null, setQuestionsInfo, regionOrContinent, setGuessesInfo }) {
   const [messages, setMessages] = useState(trainingMode ? [{
     id: '1',
     data: 'Hello I am your tour guide, try asking me a question!',
@@ -164,6 +164,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
           },
         }]))
         setQuestionsInfo(jsonData.category_chances_dict)
+        setGuessesInfo(jsonData.guess_chances_count)
         if (jsonData.flags.includes("correct_guess")) {
           setGameOverInfo({ ...jsonData, status: "winner", color: "green" })
         }
@@ -250,7 +251,8 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
           },
         },
       }])
-      setTravelerData(jsonData)
+      setTravelerData(jsonData.guess_chances_count)
+      setGuessesInfo(jsonData)
     } catch (err) {
       console.log(err)
     }
