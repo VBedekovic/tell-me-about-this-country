@@ -9,13 +9,13 @@ Educational web application for learning about countries with OpenAI.
 **Note: An OpenAI API key is required for this application.**
 
 ## Getting Started
-To start the application, run the following command:
-```bash
-npm run start
-```
-If you made changes to the frontend, run the following command to build the frontend app and put the files in the public folder of the Express.js server:
+If you are first time starting or made changes to the frontend, run the following command to build the frontend app and put the files in the public folder of the Express.js server:
 ```bash
 npm run build-and-start
+```
+To just start the application, run the following command:
+```bash
+npm run start
 ```
 
 ## Features
