@@ -243,7 +243,7 @@ function GamePage() {
                 alignItems="center"
                 justifyContent="center">
                 <Typography variant='h6' sx={{ mb: 1.5, fontFamily: "var(--primary-font)", fontWeight: "bold" }} color="text.secondary">
-                  TIME LEFT
+                  TIME
                 </Typography>
                 <Typography variant="h6" sx={{ mb: 1.5, fontFamily: "var(--primary-font)" }}>
                   {gameOverTimer} s
