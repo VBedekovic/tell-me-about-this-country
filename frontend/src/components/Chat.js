@@ -240,6 +240,19 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         console.log(jsonData)
         setQuestionsInfo(jsonData)
       }
+      if (jsonData) {
+        const response3 = await fetch(`${apiLink}/traveler-v1/current-traveler-guess-chances`,
+          {
+            method: "GET",
+            mode: "cors",
+            headers: {
+              "Content-type": "application/json"
+            }
+          })
+        const jsonData = await response3.json();
+        console.log(jsonData)
+        setGuessesInfo(jsonData.guess_chances_count)
+      }
       setMessages([{
         id: '1',
         data: `Hello my name is ${jsonData.name}, try guessing where I am!`,
@@ -251,8 +264,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
           },
         },
       }])
-      setTravelerData(jsonData.guess_chances_count)
-      setGuessesInfo(jsonData)
+      setTravelerData(jsonData)
     } catch (err) {
       console.log(err)
     }
