@@ -1,6 +1,7 @@
 import React, { Fragment, useState, useEffect } from "react";
 import Messages from "./Messages";
 import Input from "./Input";
+import TypingIndicator from "./TypingIndicator";
 import '../Chat-styles.css';
 import "../App.css"
 import { countries } from "country-list-json";
@@ -48,9 +49,9 @@ let serverColor = randomColor()
 let serverName = randomName()
 
 function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = null, setQuestionsInfo, regionOrContinent }) {
-  const [messages, setMessages] = useState([{
+  const [messages, setMessages] = useState(trainingMode ? [{
     id: '1',
-    data: 'This is a test message!',
+    data: 'Hello I am your tour guide, try asking me a question!',
     member: {
       id: '1',
       clientData: {
@@ -58,17 +59,18 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         username: serverName,
       },
     },
-  }]);
+  }] : []);
   const [me, setMe] = useState({
     id: '2',
     username: "Player",
     color: myColor,
   });
-  const [questions, setQuestions] = useState(false)
+  const [questions, setQuestions] = useState([])
   const [anchorEl, setAnchorEl] = useState(null);
   const [inputBox, setInputBox] = useState("")
   const [travelerData, setTravelerData] = useState(null)
   const [trainingSelectedCountry, setTrainingSelectedCountry] = useState(null)
+  const [typing, setTyping] = useState(false)
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -94,6 +96,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         },
       },
     }]))
+    setTyping(true)
     if (trainingMode) {
       try {
         // add real app link from env
@@ -112,6 +115,8 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         //dodati kak vec ide ovaj jsonData objekt
         const jsonData = await response.json();
         console.log(jsonData)
+        if (jsonData) setTyping(false)
+
         setMessages(previousMessages => ([...previousMessages, {
           id: Math.random(),
           data: jsonData.answer,
@@ -144,6 +149,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         //dodati kak vec ide ovaj jsonData objekt
         const jsonData = await response.json();
         console.log(jsonData)
+        if (jsonData) setTyping(false)
         setMessages(previousMessages => ([...previousMessages, {
           id: Math.random(),
           data: jsonData.answer,
@@ -175,6 +181,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
             }, gameOver: true
           })
         }*/
+
       } catch (err) {
         console.log(err)
       }
@@ -195,8 +202,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         })
       const jsonData = await response.json();
       console.log(jsonData)
-      setQuestions(jsonData.questionsArray)
-
+      setQuestions(jsonData.questionsArray);
     } catch (err) {
       console.log(err)
     }
@@ -230,6 +236,17 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
         console.log(jsonData)
         setQuestionsInfo(jsonData)
       }
+      setMessages([{
+        id: '1',
+        data: `Hello my name is ${jsonData.name}, try guessing where I am!`,
+        member: {
+          id: '1',
+          clientData: {
+            color: serverColor,
+            username: jsonData.name ? jsonData.name : serverName,
+          },
+        },
+      }])
       setTravelerData(jsonData)
     } catch (err) {
       console.log(err)
@@ -288,6 +305,7 @@ function Chat({ trainingMode, chatDisabled, selectedCountry, setGameOverInfo = n
 
         <div className="appContent" >
           <Messages messages={messages} me={me} />
+          {typing ? <TypingIndicator members={[{ name: travelerData ? travelerData.name : serverName }]} /> : ""}
           <Input
             chatDisabled={chatDisabled}
             onSendMessage={onSendMessage}
