@@ -86,7 +86,7 @@ ${question}
    */
 function travelerChooseCountryPrompt(regionOrContinentString, personalityArray, genderString, nameString) {
     return `
-You are a traveler with these personality traits: ${personalityArray.join(", ")}.
+You are a traveler with an equal fondness of all countries.
 You are a ${genderString} with the name: ${nameString}.
 In what random country from ${regionOrContinentString} would you travel now.
 Write your answers like a json object with one variable "country" and it should contain only the name of the country.
